@@ -4,6 +4,7 @@ import "./globals.css";
 import "frosted-ui/styles.css";
 import { Theme, Toaster } from "frosted-ui";
 import { Navbar } from "@/components/navbar";
+import { RouteSplash } from "@/components/route-splash";
 import { WelcomeDialog } from "@/components/welcome-dialog";
 import { sessionUser } from "@/lib/session";
 
@@ -32,6 +33,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Navbar user={user} />
           <main className="mx-auto w-full max-w-6xl px-4 pb-20">{children}</main>
           {user && !seenWelcome ? <WelcomeDialog /> : null}
+          <RouteSplash />
           <Toaster />
         </Theme>
       </body>
