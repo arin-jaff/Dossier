@@ -1,0 +1,12 @@
+{
+	"mcpServers": {
+		"whop-docs": {
+			"type": "http",
+			"url": "https://docs.whop.com/mcp"
+		},
+		"whop-api": {
+			"type": "http",
+			"url": "https://mcp.whop.com/mcp"
+		}
+	}
+}
