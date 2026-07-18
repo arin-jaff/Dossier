@@ -29,7 +29,7 @@ export default function CreatePage() {
             <Text size="2" weight="medium">
               Category
             </Text>
-            <Select.Root name="category" defaultValue="content" size="3">
+            <Select.Root name="category" defaultValue="content" size="3" items={CATEGORY_LABELS}>
               <Select.Trigger />
               <Select.Content>
                 {CATEGORIES.map((c) => (

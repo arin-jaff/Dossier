@@ -24,6 +24,7 @@ export default async function Earnings() {
 
   const lifetime = txns.filter((tx) => tx.kind === "earning").reduce((sum, tx) => sum + tx.amountCents, 0);
   const closed = subs.filter((s) => s.status === "approved").length;
+  const pending = subs.filter((s) => s.status === "submitted").reduce((sum, s) => sum + s.payoutCents, 0);
 
   return (
     <div className="flex flex-col gap-8 pt-10">
@@ -46,6 +47,11 @@ export default async function Earnings() {
           <Badge size="2" color="success" variant="soft">
             {fmtMoney(lifetime)} lifetime extracted
           </Badge>
+          {pending > 0 ? (
+            <Badge size="2" color="info" variant="soft">
+              {fmtMoney(pending)} pending clearance
+            </Badge>
+          ) : null}
           <Badge size="2" color="gray" variant="soft">
             {closed} contract{closed === 1 ? "" : "s"} closed
           </Badge>

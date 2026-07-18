@@ -44,6 +44,9 @@ async function main() {
   });
 
   const tasks: T[] = [
+    t(sam, "Produce the launch trailer for my flagship course", "video", 500, 2, 12, 0,
+      "Chen Trading Academy's biggest release of the year needs a 90-second cinematic trailer. Raw testimonial footage, screen captures, and brand kit provided. This is the contract everyone sees first — bring your best cut.",
+      "- 90 seconds, 16:9 + 9:16 exports\n- Licensed or original music only\n- Two revision rounds included\n- Deliver via Drive with project files"),
     t(sam, "Clip my podcast into viral TikToks", "content", 15, 10, 7, 2,
       "I drop a 90-minute trading podcast every Monday. Cut it into punchy 30–60s vertical clips with captions. Best clip each week gets a bonus slot on the next batch.",
       "- 9:16 vertical, 1080p or better\n- Burned-in captions\n- Hook in the first 2 seconds\n- Submit a TikTok or Drive link"),

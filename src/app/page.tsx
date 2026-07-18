@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Badge, Button, Heading, Text, TextField } from "frosted-ui";
 import { TaskCard, type FeedTask } from "@/components/task-card";
 import { sql } from "@/lib/db";
-import { CATEGORIES, CATEGORY_LABELS, fmtMoney } from "@/lib/types";
+import { CATEGORIES, CATEGORY_LABELS, fmtMoney, timeAgo } from "@/lib/types";
 import type { Category } from "@/lib/types";
 
 export default async function Home({
@@ -29,6 +29,14 @@ export default async function Home({
     (SELECT count(*)::int FROM tasks WHERE status = 'active') AS open,
     (SELECT coalesce(sum(amount_cents), 0)::int FROM transactions WHERE kind = 'earning') AS paid`;
 
+  const recent = (await sql`SELECT tx.amount_cents, tx.created_at, u.name
+    FROM transactions tx JOIN users u ON u.id = tx.user_id
+    WHERE tx.kind = 'earning' ORDER BY tx.created_at DESC LIMIT 3`) as unknown as {
+    amountCents: number;
+    createdAt: number;
+    name: string;
+  }[];
+
   return (
     <div className="flex flex-col gap-8 pt-10">
       <section className="flex flex-col gap-3">
@@ -47,6 +55,19 @@ export default async function Home({
             {fmtMoney(stats.paid)} extracted by operatives
           </Badge>
         </div>
+        {recent.length ? (
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            {recent.map((r, i) => (
+              <Text key={i} size="1" color="gray" className="font-mono">
+                {r.name
+                  .split(" ")
+                  .map((w) => w[0])
+                  .join(".")}
+                . extracted {fmtMoney(r.amountCents)} · {timeAgo(r.createdAt)}
+              </Text>
+            ))}
+          </div>
+        ) : null}
       </section>
 
       <section className="flex flex-col gap-4">

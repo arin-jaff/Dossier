@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Dossier — the contract board on Whop",
   description:
     "A task marketplace on Whop. Handlers issue paid contracts. Operatives complete them, file a debrief, and extract the payout.",
+  icons: { icon: "/whop-mark.svg" },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

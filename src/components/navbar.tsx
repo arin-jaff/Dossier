@@ -24,9 +24,7 @@ export function Navbar({ user, personas }: { user: User; personas: User[] }) {
     <header className="sticky top-0 z-50 border-b border-[var(--gray-a5)] bg-[var(--color-background)]/85 backdrop-blur-md">
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center gap-5 px-4">
         <Link href="/" className="flex items-center gap-2">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#FA4616] text-[15px] font-black text-white">
-            W
-          </span>
+          <img src="/whop-mark.svg" alt="Whop" width={39} height={20} style={{ height: 20, width: "auto" }} />
           <span className="text-[17px] font-bold tracking-tight">Dossier</span>
         </Link>
         <nav className="hidden sm:block">

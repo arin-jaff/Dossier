@@ -69,15 +69,18 @@ export default async function TaskPage({ params }: { params: Promise<{ id: strin
         {requirements.length ? (
           <div className="flex flex-col gap-2">
             <Heading size="4">Deliverables</Heading>
-            <ul className="flex list-disc flex-col gap-1 pl-5">
+            <div className="flex flex-col gap-1.5">
               {requirements.map((r: string) => (
-                <li key={r}>
+                <div key={r} className="flex gap-2.5">
+                  <Text size="2" color="gray" className="select-none">
+                    —
+                  </Text>
                   <Text size="2" color="gray">
                     {r}
                   </Text>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         ) : null}
       </div>
