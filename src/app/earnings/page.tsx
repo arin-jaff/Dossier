@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Badge, Card, Heading, Text } from "frosted-ui";
+import { BalanceShine } from "@/components/balance-shine";
+import { PageArt } from "@/components/page-art";
 import { WithdrawButton } from "@/components/withdraw-button";
 import { sql } from "@/lib/db";
 import { currentUser } from "@/lib/session";
@@ -28,15 +30,19 @@ export default async function Earnings() {
 
   return (
     <div className="flex flex-col gap-8 pt-10">
-      <section className="flex flex-col gap-2">
+      <section className="relative overflow-hidden rounded-2xl border border-[var(--gray-a4)] p-6">
+        <PageArt src="/vault-art.png" opacity={0.22} />
+        <div className="relative flex flex-col gap-2">
         <Text size="1" color="gray" className="uppercase tracking-[0.08em]">
           Your Vault
         </Text>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="flex flex-col gap-1">
-            <Text size="9" weight="bold" color="success">
-              {fmtMoney(user.balanceCents)}
-            </Text>
+            <BalanceShine>
+              <Text size="9" weight="bold" color="success">
+                {fmtMoney(user.balanceCents)}
+              </Text>
+            </BalanceShine>
             <Text size="2" color="gray">
               Available to extract
             </Text>
@@ -83,6 +89,7 @@ export default async function Earnings() {
               </Text>
             </div>
           </Card>
+        </div>
         </div>
       </section>
 

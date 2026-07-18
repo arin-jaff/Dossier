@@ -28,7 +28,7 @@ const STEPS = [
     title: "Approve",
     line: "The Handler reviews the debrief. Approval releases the payout.",
     money: "Released",
-    color: "success" as const,
+    color: "orange" as const,
   },
   {
     n: "05",
@@ -200,10 +200,10 @@ export default function HowPage() {
 
       <section className="flex flex-col gap-4">
         <Heading size="4">How the money works</Heading>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {MONEY_RULES.map((r) => (
-            <Card key={r.title} size="3" variant="surface">
-              <div className="flex flex-col gap-2">
+        <Card size="3" variant="surface">
+          <div className="grid grid-cols-1 divide-y divide-[var(--gray-a4)] sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+            {MONEY_RULES.map((r) => (
+              <div key={r.title} className="flex flex-col gap-2 px-4 py-3 first:pl-1 sm:py-1 sm:first:pl-1 sm:last:pr-1">
                 <Text size="2" weight="bold">
                   {r.title}
                 </Text>
@@ -211,18 +211,28 @@ export default function HowPage() {
                   {r.line}
                 </Text>
               </div>
-            </Card>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Card>
       </section>
 
       <section className="flex flex-col gap-4">
         <Heading size="4">Everyone wins</Heading>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {WINNERS.map((w) => (
-            <Card key={w.who} size="3" variant="surface">
+          {WINNERS.map((w, i) => (
+            <Card
+              key={w.who}
+              size="3"
+              variant="surface"
+              className="border-t-2"
+              style={{ borderTopColor: `var(--${["orange", "sky", "green"][i]}-9)` }}
+            >
               <div className="flex flex-col gap-3">
-                <Text size="1" color="gray" className="uppercase tracking-[0.08em]">
+                <Text
+                  size="1"
+                  color={(["orange", "sky", "green"] as const)[i]}
+                  className="uppercase tracking-[0.08em]"
+                >
                   {w.who}
                 </Text>
                 <div className="flex flex-col gap-1.5">

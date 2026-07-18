@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Badge, Card, Heading, Text } from "frosted-ui";
+import { Badge, Card, Heading, Progress, Text, Tooltip } from "frosted-ui";
 import { AcceptButton } from "@/components/accept-button";
+import { PageArt } from "@/components/page-art";
 import { ReviewQueue, type QueueItem } from "@/components/review-queue";
 import { sql } from "@/lib/db";
 import { currentUser } from "@/lib/session";
@@ -66,7 +67,9 @@ export default async function Dashboard() {
 
   return (
     <div className="flex flex-col gap-8 pt-10">
-      <section className="flex flex-col gap-2">
+      <section className="relative overflow-hidden rounded-2xl border border-[var(--gray-a4)] p-6">
+        <PageArt src="/console-art.png" opacity={0.25} />
+        <div className="relative flex flex-col gap-2">
         <Text size="1" color="gray" className="uppercase tracking-[0.08em]">
           Handler console
         </Text>
@@ -81,9 +84,12 @@ export default async function Dashboard() {
           <Badge size="2" color="info" variant="soft">
             {queue.length} debrief{queue.length === 1 ? "" : "s"} pending
           </Badge>
-          <Badge size="2" color="success" variant="soft">
-            {fmtMoney(committed)} committed
-          </Badge>
+          <Tooltip content="Payout × slots across your active contracts">
+            <Badge size="2" color="success" variant="soft">
+              {fmtMoney(committed)} committed
+            </Badge>
+          </Tooltip>
+        </div>
         </div>
       </section>
 
@@ -202,6 +208,7 @@ export default async function Dashboard() {
                     <Text render={<p />} size="2" color="gray" className="line-clamp-2">
                       {t.description}
                     </Text>
+                    <Progress size="1" color={t.status === "completed" ? "gray" : "success"} value={t.approved} max={t.slotsTotal} />
                     <details className="group">
                       <summary className="flex cursor-pointer list-none items-center gap-1.5 [&::-webkit-details-marker]:hidden">
                         <Text size="1" color="gray" className="uppercase tracking-[0.08em]">

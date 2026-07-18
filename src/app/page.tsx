@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Badge, Heading, Text, TextField } from "frosted-ui";
+import { Badge, Heading, Text, TextField, Tooltip } from "frosted-ui";
 import { ActivityTicker, type TickerItem } from "@/components/activity-ticker";
+import { PageArt } from "@/components/page-art";
 import { TaskCard, type FeedTask } from "@/components/task-card";
 import { sql } from "@/lib/db";
 import { CATEGORIES, CATEGORY_LABELS, fmtMoney } from "@/lib/types";
@@ -74,15 +75,19 @@ export default async function Home({
 
   return (
     <div className="flex flex-col gap-8 pt-10">
-      <section className="flex flex-col gap-3">
+      <section className="relative overflow-hidden rounded-2xl border border-[var(--gray-a4)] p-6">
+        <PageArt src="/board-art.png" />
+        <div className="relative flex flex-col gap-3">
         <Heading size="8">The Board.</Heading>
         <Text render={<p />} size="4" color="gray">
           Handlers issue contracts. Operatives execute. Your Vault pays out.
         </Text>
         <div className="mt-1 flex flex-wrap items-center gap-2">
-          <Badge size="2" color="success" variant="soft">
-            {fmtMoney(stats.available)} on the board
-          </Badge>
+          <Tooltip content="Total payout × open slots across every active contract">
+            <Badge size="2" color="success" variant="soft">
+              {fmtMoney(stats.available)} on the board
+            </Badge>
+          </Tooltip>
           <Badge size="2" color="gray" variant="soft">
             {stats.open} open contracts
           </Badge>
@@ -91,6 +96,7 @@ export default async function Home({
           </Badge>
         </div>
         <ActivityTicker items={tickerItems} />
+        </div>
       </section>
 
       <section className="flex flex-col gap-4">

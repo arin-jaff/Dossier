@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Avatar, Badge, Heading, Separator, Text } from "frosted-ui";
+import { Avatar, AvatarStack, Badge, Heading, Separator, Text } from "frosted-ui";
 import { ActionPanel } from "@/components/action-panel";
 import { sql } from "@/lib/db";
 import { currentUser } from "@/lib/session";
@@ -20,6 +20,12 @@ export default async function TaskPage({ params }: { params: Promise<{ id: strin
 
   const mineRows = (await sql`SELECT * FROM submissions WHERE task_id = ${id} AND earner_id = ${user.id}`) as unknown as Submission[];
   const mine = mineRows[0] ?? null;
+
+  const engaged = (await sql`SELECT u.id, u.name FROM submissions s JOIN users u ON u.id = s.earner_id
+    WHERE s.task_id = ${id} AND s.status != 'rejected' ORDER BY s.claimed_at ASC LIMIT 8`) as unknown as {
+    id: string;
+    name: string;
+  }[];
 
   const slotsLeft = Math.max(0, task.slotsTotal - task.taken);
   const requirements = String(task.requirements ?? "")
@@ -42,6 +48,18 @@ export default async function TaskPage({ params }: { params: Promise<{ id: strin
           <Text size="1" color="gray">
             Posted {timeAgo(task.createdAt)}
           </Text>
+          {engaged.length ? (
+            <span className="ml-auto flex items-center gap-2">
+              <AvatarStack.Root size="1">
+                {engaged.map((e) => (
+                  <AvatarStack.Avatar key={e.id} color="gray" fallback={initials(e.name)} />
+                ))}
+              </AvatarStack.Root>
+              <Text size="1" color="gray">
+                {engaged.length} operative{engaged.length === 1 ? "" : "s"} engaged
+              </Text>
+            </span>
+          ) : null}
         </div>
         <Heading size="7">{task.title}</Heading>
         <div className="flex flex-col gap-1.5">
