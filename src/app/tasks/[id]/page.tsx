@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Avatar, Badge, Heading, Separator, Text } from "frosted-ui";
 import { ActionPanel } from "@/components/action-panel";
@@ -47,17 +48,19 @@ export default async function TaskPage({ params }: { params: Promise<{ id: strin
           <Text size="1" color="gray" className="uppercase tracking-[0.08em]">
             Handler
           </Text>
-          <div className="flex items-center gap-3">
-            <Avatar size="3" color="gray" fallback={initials(task.posterName)} />
-            <div className="flex flex-col">
-              <Text size="2" weight="medium">
-                {task.posterName}
-              </Text>
-              <Text size="1" color="gray">
-                {task.posterBio}
-              </Text>
+          <Link href={`/operatives/${task.posterId}`} className="transition-opacity hover:opacity-80">
+            <div className="flex items-center gap-3">
+              <Avatar size="3" color="gray" fallback={initials(task.posterName)} />
+              <div className="flex flex-col">
+                <Text size="2" weight="medium">
+                  {task.posterName}
+                </Text>
+                <Text size="1" color="gray">
+                  {task.posterBio}
+                </Text>
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
         <Separator size="4" />
         <div className="flex flex-col gap-2">

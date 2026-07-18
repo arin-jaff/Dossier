@@ -11,6 +11,7 @@ export interface QueueItem {
   taskId: string;
   taskTitle: string;
   payoutCents: number;
+  earnerId: string;
   earnerName: string;
   proofText: string | null;
   proofUrl: string | null;
@@ -56,9 +57,11 @@ export function ReviewQueue({ items }: { items: QueueItem[] }) {
           <div className="flex flex-col gap-3">
             <div className="flex flex-wrap items-center gap-2">
               <Avatar size="2" color="gray" fallback={initials(item.earnerName)} />
-              <Text size="2" weight="medium">
-                {item.earnerName}
-              </Text>
+              <Link href={`/operatives/${item.earnerId}`}>
+                <Text size="2" weight="medium" className="hover:underline">
+                  {item.earnerName}
+                </Text>
+              </Link>
               <Text size="1" color="gray">
                 {timeAgo(item.submittedAt)} ·
               </Text>

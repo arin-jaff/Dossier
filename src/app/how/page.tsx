@@ -39,6 +39,31 @@ const STEPS = [
   },
 ];
 
+const ROLES = [
+  {
+    eyebrow: "You're here to earn",
+    who: "Operative",
+    steps: [
+      ["Browse The Board", "Every open contract shows payout, slots, and deadline up front."],
+      ["Accept & deliver", "Claim a slot, do the work, file your debrief with deliverables."],
+      ["Get paid", "Approval releases the payout to your Vault — extract anytime."],
+    ],
+    href: "/",
+    cta: "Open The Board",
+  },
+  {
+    eyebrow: "You're here to hire",
+    who: "Handler",
+    steps: [
+      ["Issue a contract", "Set payout × slots — your total exposure, visible before you post."],
+      ["Review debriefs", "Operative work lands in your Console the moment it's filed."],
+      ["Release payouts", "Approve to pay. Declining costs nothing and reopens the slot."],
+    ],
+    href: "/create",
+    cta: "Issue a contract",
+  },
+];
+
 const MONEY_RULES = [
   {
     title: "Payout × slots = total exposure",
@@ -57,15 +82,27 @@ const MONEY_RULES = [
 const WINNERS = [
   {
     who: "Handlers",
-    lines: ["Work delivered on demand, without hiring.", "Pay only for output you approve.", "Scale one task to twenty operatives."],
+    lines: [
+      "Work delivered on demand, without hiring.",
+      "Pay only for output you approve.",
+      "Scale one task to twenty operatives.",
+    ],
   },
   {
     who: "Operatives",
-    lines: ["Real payouts, not exposure.", "No interviews — accept and execute.", "Every closed contract compounds your record."],
+    lines: [
+      "Real payouts, not exposure.",
+      "No interviews — accept and execute.",
+      "Every closed contract compounds your record.",
+    ],
   },
   {
     who: "Whop",
-    lines: ["A reason to come back every day.", "Money earned stays in the ecosystem.", "Every visitor can earn before they spend."],
+    lines: [
+      "A reason to come back every day.",
+      "Money earned stays in the ecosystem.",
+      "Every visitor can earn before they spend.",
+    ],
   },
 ];
 
@@ -76,9 +113,13 @@ export default function HowPage() {
         <Text size="1" color="gray" className="uppercase tracking-[0.08em]">
           The Protocol
         </Text>
-        <Heading size="8">How Dossier works.</Heading>
+        <Heading size="8">Welcome to Dossier.</Heading>
         <Text render={<p />} size="4" color="gray">
-          One loop. Five steps. Money only moves when work is approved.
+          The contract board on Whop. Work posted with money behind it — paid the moment it&apos;s approved.
+        </Text>
+        <Text render={<p />} size="3" color="gray" className="max-w-2xl">
+          Dossier is a task marketplace. Businesses — Handlers — put real money behind work they need done. Anyone —
+          operatives — can accept a contract, deliver, and get paid. No interviews, no invoices, no waiting on net-30.
         </Text>
       </section>
 
@@ -111,6 +152,50 @@ export default function HowPage() {
             </Card>
           </div>
         ))}
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <Heading size="4">How to use it</Heading>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {ROLES.map((r) => (
+            <Card key={r.who} size="4" variant="surface">
+              <div className="flex h-full flex-col gap-4">
+                <div className="flex flex-col gap-1">
+                  <Text size="1" color="orange" className="uppercase tracking-[0.08em]">
+                    {r.eyebrow}
+                  </Text>
+                  <Text size="4" weight="bold">
+                    {r.who}
+                  </Text>
+                </div>
+                <div className="flex flex-col gap-3">
+                  {r.steps.map(([title, line], i) => (
+                    <div key={title} className="flex gap-3">
+                      <Text size="1" color="gray" className="pt-0.5 font-mono">
+                        0{i + 1}
+                      </Text>
+                      <div className="flex flex-col">
+                        <Text size="2" weight="medium">
+                          {title}
+                        </Text>
+                        <Text size="1" color="gray">
+                          {line}
+                        </Text>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-auto pt-1">
+                  <Link href={r.href}>
+                    <Badge size="2" color="orange" variant="soft">
+                      {r.cta}
+                    </Badge>
+                  </Link>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
       </section>
 
       <section className="flex flex-col gap-4">

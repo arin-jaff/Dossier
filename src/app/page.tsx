@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { Badge, Button, Heading, Text, TextField } from "frosted-ui";
+import { Badge, Heading, Text, TextField } from "frosted-ui";
+import { ActivityTicker, type TickerItem } from "@/components/activity-ticker";
 import { TaskCard, type FeedTask } from "@/components/task-card";
 import { sql } from "@/lib/db";
-import { CATEGORIES, CATEGORY_LABELS, fmtMoney, timeAgo } from "@/lib/types";
+import { CATEGORIES, CATEGORY_LABELS, fmtMoney } from "@/lib/types";
 import type { Category } from "@/lib/types";
 
 export default async function Home({
@@ -29,20 +30,54 @@ export default async function Home({
     (SELECT count(*)::int FROM tasks WHERE status = 'active') AS open,
     (SELECT coalesce(sum(amount_cents), 0)::int FROM transactions WHERE kind = 'earning') AS paid`;
 
-  const recent = (await sql`SELECT tx.amount_cents, tx.created_at, u.name
-    FROM transactions tx JOIN users u ON u.id = tx.user_id
-    WHERE tx.kind = 'earning' ORDER BY tx.created_at DESC LIMIT 3`) as unknown as {
-    amountCents: number;
+  const issued = (await sql`SELECT t.title, t.payout_cents, t.slots_total, t.created_at, u.name
+    FROM tasks t JOIN users u ON u.id = t.poster_id
+    ORDER BY t.created_at DESC LIMIT 5`) as unknown as {
+    title: string;
+    payoutCents: number;
+    slotsTotal: number;
     createdAt: number;
     name: string;
   }[];
+
+  const earnings = (await sql`SELECT tx.amount_cents, tx.created_at, u.name, t.title
+    FROM transactions tx
+    JOIN users u ON u.id = tx.user_id
+    JOIN submissions s ON s.id = tx.submission_id
+    JOIN tasks t ON t.id = s.task_id
+    WHERE tx.kind = 'earning'
+    ORDER BY tx.created_at DESC LIMIT 5`) as unknown as {
+    amountCents: number;
+    createdAt: number;
+    name: string;
+    title: string;
+  }[];
+
+  const tickerItems: TickerItem[] = [
+    ...issued.map((r) => ({
+      who: r.name,
+      verb: "contracted out",
+      title: `"${r.title}"`,
+      money: `${fmtMoney(r.payoutCents)}/slot`,
+      ts: Number(r.createdAt),
+    })),
+    ...earnings.map((r) => ({
+      who: r.name,
+      verb: "extracted",
+      title: `— "${r.title}"`,
+      money: fmtMoney(r.amountCents),
+      ts: Number(r.createdAt),
+    })),
+  ]
+    .sort((a, b) => b.ts - a.ts)
+    .slice(0, 8);
 
   return (
     <div className="flex flex-col gap-8 pt-10">
       <section className="flex flex-col gap-3">
         <Heading size="8">The Board.</Heading>
         <Text render={<p />} size="4" color="gray">
-          Handlers issue contracts. Operatives execute. The Vault pays out.
+          Handlers issue contracts. Operatives execute. Your Vault pays out.
         </Text>
         <div className="mt-1 flex flex-wrap items-center gap-2">
           <Badge size="2" color="success" variant="soft">
@@ -55,24 +90,12 @@ export default async function Home({
             {fmtMoney(stats.paid)} extracted by operatives
           </Badge>
         </div>
-        {recent.length ? (
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            {recent.map((r, i) => (
-              <Text key={i} size="1" color="gray" className="font-mono">
-                {r.name
-                  .split(" ")
-                  .map((w) => w[0])
-                  .join(".")}
-                . extracted {fmtMoney(r.amountCents)} · {timeAgo(r.createdAt)}
-              </Text>
-            ))}
-          </div>
-        ) : null}
+        <ActivityTicker items={tickerItems} />
       </section>
 
       <section className="flex flex-col gap-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <form action="/" className="w-full max-w-sm">
+          <form action="/search" className="w-full max-w-sm">
             {category ? <input type="hidden" name="cat" value={category} /> : null}
             <TextField.Root size="3">
               <TextField.Input name="q" placeholder="Search contracts…" defaultValue={q ?? ""} />

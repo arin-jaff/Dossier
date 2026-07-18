@@ -30,7 +30,7 @@ export default async function Earnings() {
     <div className="flex flex-col gap-8 pt-10">
       <section className="flex flex-col gap-2">
         <Text size="1" color="gray" className="uppercase tracking-[0.08em]">
-          The Vault
+          Your Vault
         </Text>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="flex flex-col gap-1">
@@ -43,18 +43,46 @@ export default async function Earnings() {
           </div>
           <WithdrawButton balanceCents={user.balanceCents} />
         </div>
-        <div className="mt-1 flex flex-wrap items-center gap-2">
-          <Badge size="2" color="success" variant="soft">
-            {fmtMoney(lifetime)} lifetime extracted
-          </Badge>
-          {pending > 0 ? (
-            <Badge size="2" color="info" variant="soft">
-              {fmtMoney(pending)} pending clearance
-            </Badge>
-          ) : null}
-          <Badge size="2" color="gray" variant="soft">
-            {closed} contract{closed === 1 ? "" : "s"} closed
-          </Badge>
+        <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <Card size="3" variant="surface">
+            <div className="flex flex-col gap-1">
+              <Text size="1" color="gray" className="uppercase tracking-[0.08em]">
+                Lifetime extracted
+              </Text>
+              <Text size="7" weight="bold" color="success">
+                {fmtMoney(lifetime)}
+              </Text>
+              <Text size="1" color="gray">
+                released to you all-time
+              </Text>
+            </div>
+          </Card>
+          <Card size="3" variant="surface">
+            <div className="flex flex-col gap-1">
+              <Text size="1" color="gray" className="uppercase tracking-[0.08em]">
+                Pending clearance
+              </Text>
+              <Text size="7" weight="bold" color="info">
+                {fmtMoney(pending)}
+              </Text>
+              <Text size="1" color="gray">
+                debriefs awaiting review
+              </Text>
+            </div>
+          </Card>
+          <Card size="3" variant="surface">
+            <div className="flex flex-col gap-1">
+              <Text size="1" color="gray" className="uppercase tracking-[0.08em]">
+                Contracts closed
+              </Text>
+              <Text size="7" weight="bold">
+                {closed}
+              </Text>
+              <Text size="1" color="gray">
+                approved and paid
+              </Text>
+            </div>
+          </Card>
         </div>
       </section>
 

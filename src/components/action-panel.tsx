@@ -74,7 +74,7 @@ export function ActionPanel(p: Props) {
             <Callout.Description>
               Approved {p.mine.reviewedAt ? timeAgo(p.mine.reviewedAt) : ""}. Funds released to{" "}
               <Link href="/earnings" className="underline">
-                the Vault
+                your Vault
               </Link>
               .
             </Callout.Description>
@@ -105,7 +105,7 @@ export function ActionPanel(p: Props) {
               File debrief
             </Button>
             <Text size="1" color="gray">
-              Your Handler reviews the debrief. Approval releases {fmtMoney(p.payoutCents)} to the Vault.
+              Your Handler reviews the debrief. Approval releases {fmtMoney(p.payoutCents)} to your Vault.
             </Text>
           </form>
         ) : p.taskStatus !== "active" || p.slotsLeft === 0 ? (
@@ -119,7 +119,7 @@ export function ActionPanel(p: Props) {
               Accept contract
             </Button>
             <Text size="1" color="gray">
-              Free to accept. Deliver, get approved, and {fmtMoney(p.payoutCents)} extracts to the Vault.
+              Free to accept. Deliver, get approved, and {fmtMoney(p.payoutCents)} extracts to your Vault.
             </Text>
           </div>
         )}
