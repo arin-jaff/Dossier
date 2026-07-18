@@ -5,14 +5,27 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { sql } from "./db";
-import { currentUser } from "./session";
+import { currentUser, DEMO_ACCOUNTS, DEMO_PASSWORD } from "./session";
 
 const uid = (p: string) => `${p}_${randomUUID().replace(/-/g, "").slice(0, 10)}`;
 
-export async function switchPersona(userId: string) {
+export async function login(form: FormData) {
+  const email = String(form.get("email") ?? "")
+    .trim()
+    .toLowerCase();
+  const password = String(form.get("password") ?? "");
+  const userId = DEMO_ACCOUNTS[email];
+  if (!userId || password !== DEMO_PASSWORD) redirect("/login?error=1");
   const store = await cookies();
   store.set("wt_user", userId, { path: "/" });
   revalidatePath("/", "layout");
+  redirect("/");
+}
+
+export async function logout() {
+  const store = await cookies();
+  store.delete("wt_user");
+  redirect("/login");
 }
 
 export async function createTask(form: FormData) {

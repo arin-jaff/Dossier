@@ -7,7 +7,7 @@ faker.seed(7);
 
 const uid = (p: string) => `${p}_${faker.string.alphanumeric(10)}`;
 
-type U = { id: string; name: string; bio: string; balanceCents: number };
+type U = { id: string; name: string; bio: string; skills: string; balanceCents: number };
 type T = {
   id: string; posterId: string; title: string; description: string; category: string;
   requirements: string; payoutCents: number; slotsTotal: number; deadlineAt: number;
@@ -25,11 +25,19 @@ async function main() {
   await sql`DELETE FROM tasks`;
   await sql`DELETE FROM users`;
 
-  const alex: U = { id: "usr_alex", name: "Alex Rivera", bio: "Clipper & video editor. 200+ tasks completed.", balanceCents: 0 };
-  const sam: U = { id: "usr_sam", name: "Sam Chen", bio: "Runs Chen Trading Academy — 4,000 members on Whop.", balanceCents: 0 };
-  const jordan: U = { id: "usr_jordan", name: "Jordan Patel", bio: "Building FitStack, a fitness community on Whop.", balanceCents: 0 };
-  const extras: U[] = Array.from({ length: 6 }, () => ({
-    id: uid("usr"), name: faker.person.fullName(), bio: "Earning on Whop Tasks.", balanceCents: 0,
+  const alex: U = { id: "usr_alex", name: "Alex Rivera", bio: "Clipper & video editor. 200+ contracts closed.", skills: "video editing, clipping, ugc, captions", balanceCents: 0 };
+  const sam: U = { id: "usr_sam", name: "Sam Chen", bio: "Runs Chen Trading Academy — 4,000 members on Whop.", skills: "copywriting, course design, trading content", balanceCents: 0 };
+  const jordan: U = { id: "usr_jordan", name: "Jordan Patel", bio: "Building FitStack, a fitness community on Whop.", skills: "community, fitness content, product", balanceCents: 0 };
+  const EXTRA_SKILLS = [
+    "clipping, captions, short-form video",
+    "translation, spanish, localization",
+    "copywriting, hooks, ad creative",
+    "ghostwriting, twitter threads, video editing",
+    "ux research, screen recording, qa",
+    "qa, bug hunting, mobile testing",
+  ];
+  const extras: U[] = Array.from({ length: 6 }, (_, i) => ({
+    id: uid("usr"), name: faker.person.fullName(), bio: "Operative on Dossier.", skills: EXTRA_SKILLS[i], balanceCents: 0,
   }));
   const users = [alex, sam, jordan, ...extras];
 

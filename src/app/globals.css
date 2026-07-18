@@ -3,3 +3,13 @@
 body {
   min-height: 100vh;
 }
+
+@keyframes splash-fade {
+  0%,
+  100% {
+    opacity: 0.08;
+  }
+  50% {
+    opacity: 1;
+  }
+}

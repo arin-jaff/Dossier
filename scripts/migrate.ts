@@ -5,8 +5,10 @@ async function main() {
     id text PRIMARY KEY,
     name text NOT NULL,
     bio text NOT NULL DEFAULT '',
+    skills text NOT NULL DEFAULT '',
     balance_cents int NOT NULL DEFAULT 0
   )`;
+  await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS skills text NOT NULL DEFAULT ''`;
   await sql`CREATE TABLE IF NOT EXISTS tasks (
     id text PRIMARY KEY,
     poster_id text NOT NULL,
