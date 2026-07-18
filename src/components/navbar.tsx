@@ -17,6 +17,7 @@ export function Navbar({ user, personas }: { user: User; personas: User[] }) {
     { href: "/", label: "The Board" },
     { href: "/dashboard", label: "Console" },
     { href: "/earnings", label: "The Vault" },
+    { href: "/how", label: "Protocol" },
   ];
 
   return (
@@ -54,8 +55,8 @@ export function Navbar({ user, personas }: { user: User; personas: User[] }) {
               </Button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content align="end">
-              <DropdownMenu.GroupLabel>Identities</DropdownMenu.GroupLabel>
-              <DropdownMenu.Separator />
+              <DropdownMenu.Group>
+                <DropdownMenu.GroupLabel>Identities</DropdownMenu.GroupLabel>
               {personas.map((p) => (
                 <DropdownMenu.Item
                   key={p.id}
@@ -77,6 +78,7 @@ export function Navbar({ user, personas }: { user: User; personas: User[] }) {
                   </span>
                 </DropdownMenu.Item>
               ))}
+              </DropdownMenu.Group>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
         </div>
