@@ -1,27 +1,29 @@
-import { Button, Callout, Card, Heading, Text, TextField } from "frosted-ui";
+import { Button, Callout, Card, Text, TextField } from "frosted-ui";
 import { login } from "@/lib/actions";
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams;
   return (
-    <div className="mx-auto grid w-full max-w-4xl items-center gap-10 pt-14 lg:grid-cols-2">
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col gap-2">
-          <Text size="1" color="gray" className="uppercase tracking-[0.08em]">
-            Restricted access
-          </Text>
-          <Heading size="8">Clock in.</Heading>
-          <Text render={<p />} size="3" color="gray">
-            The contract board on Whop. Work with money behind it.
+    <div className="fixed inset-0 z-50">
+      <img src="/dossier-key-art.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
+      <div className="absolute inset-0 bg-black/60" />
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-md flex-col items-center justify-center gap-7 px-4">
+        <div className="flex flex-col items-center gap-4">
+          <img src="/whop-mark.svg" alt="Whop" style={{ height: 48, width: "auto" }} />
+          <span className="text-6xl font-black tracking-tight">Dossier.</span>
+          <Text size="1" color="gray" className="uppercase tracking-[0.3em]">
+            Clock in
           </Text>
         </div>
         {error ? (
-          <Callout.Root color="danger">
-            <Callout.Title>Access denied</Callout.Title>
-            <Callout.Description>Check your credentials and try again.</Callout.Description>
-          </Callout.Root>
+          <div className="w-full">
+            <Callout.Root color="danger">
+              <Callout.Title>Access denied</Callout.Title>
+              <Callout.Description>Check your credentials and try again.</Callout.Description>
+            </Callout.Root>
+          </div>
         ) : null}
-        <Card size="4" variant="surface">
+        <Card size="4" variant="surface" className="w-full">
           <form action={login} className="flex flex-col gap-4">
             <label className="flex flex-col gap-2">
               <Text size="2" weight="medium">
@@ -44,16 +46,9 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
             </Button>
           </form>
         </Card>
-        <Text size="1" color="gray">
-          Demo access — alex@dossier.app · sam@dossier.app · jordan@dossier.app · password: operative
+        <Text size="1" color="gray" className="text-center">
+          Demo access — alex@dossier.app · jordan@dossier.app · sam@dossier.app · password: operative
         </Text>
-      </div>
-      <div className="hidden lg:block">
-        <img
-          src="/dossier-key-art.png"
-          alt=""
-          className="h-[540px] w-full rounded-2xl border border-[var(--gray-a5)] object-cover"
-        />
       </div>
     </div>
   );

@@ -20,6 +20,8 @@ export function Navbar({ user }: { user: User | null }) {
     { href: "/how", label: "Protocol" },
   ];
 
+  if (pathname === "/login") return null;
+
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--gray-a5)] bg-[var(--color-background)]/85 backdrop-blur-md">
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center gap-5 px-4">
