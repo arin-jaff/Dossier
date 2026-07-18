@@ -28,6 +28,50 @@ export async function logout() {
   redirect("/login");
 }
 
+export async function addSkill(form: FormData) {
+  const user = await currentUser();
+  const skill = String(form.get("skill") ?? "")
+    .trim()
+    .toLowerCase()
+    .slice(0, 30);
+  if (!skill) return;
+  const skills = user.skills
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (skills.some((s) => s.toLowerCase() === skill)) return;
+  skills.push(skill);
+  await sql`UPDATE users SET skills = ${skills.join(", ")} WHERE id = ${user.id}`;
+  revalidatePath("/", "layout");
+}
+
+export async function removeSkill(skill: string) {
+  const user = await currentUser();
+  const skills = user.skills
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => s && s.toLowerCase() !== skill.toLowerCase());
+  await sql`UPDATE users SET skills = ${skills.join(", ")} WHERE id = ${user.id}`;
+  revalidatePath("/", "layout");
+}
+
+export async function addCredential(form: FormData) {
+  const user = await currentUser();
+  const title = String(form.get("title") ?? "").trim().slice(0, 120);
+  const issuer = String(form.get("issuer") ?? "").trim().slice(0, 80);
+  const url = String(form.get("url") ?? "").trim();
+  if (!title) return;
+  await sql`INSERT INTO credentials (id, user_id, title, issuer, url, created_at)
+    VALUES (${uid("crd")}, ${user.id}, ${title}, ${issuer || null}, ${url || null}, ${Date.now()})`;
+  revalidatePath("/", "layout");
+}
+
+export async function removeCredential(credentialId: string) {
+  const user = await currentUser();
+  await sql`DELETE FROM credentials WHERE id = ${credentialId} AND user_id = ${user.id}`;
+  revalidatePath("/", "layout");
+}
+
 export async function createTask(form: FormData) {
   const user = await currentUser();
   const title = String(form.get("title") ?? "").trim();

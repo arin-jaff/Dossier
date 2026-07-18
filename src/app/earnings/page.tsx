@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Badge, Card, Heading, Text } from "frosted-ui";
 import { BalanceShine } from "@/components/balance-shine";
+import { VaultCard } from "@/components/vault-card";
 import { PageArt } from "@/components/page-art";
 import { WithdrawButton } from "@/components/withdraw-button";
 import { sql } from "@/lib/db";
@@ -148,6 +149,14 @@ export default async function Earnings() {
 
       <section className="flex flex-col gap-4">
         <Heading size="5">Ledger</Heading>
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-start">
+          <div className="flex w-full max-w-xs shrink-0 flex-col gap-2">
+            <VaultCard name={user.name} />
+            <Text size="1" color="gray" className="text-center uppercase tracking-[0.08em]">
+              Extraction destination
+            </Text>
+          </div>
+          <div className="min-w-0 flex-1">
         {txns.length === 0 ? (
           <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-[var(--gray-a6)] py-12">
             <Text size="3" weight="bold">
@@ -184,6 +193,8 @@ export default async function Earnings() {
             ))}
           </div>
         )}
+          </div>
+        </div>
       </section>
     </div>
   );

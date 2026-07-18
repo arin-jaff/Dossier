@@ -1,11 +1,15 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Avatar, Badge, Card, Heading, Text } from "frosted-ui";
+import { CredentialsEditor, type CredentialItem } from "@/components/credentials-editor";
+import { SkillEditor } from "@/components/skill-editor";
 import { sql } from "@/lib/db";
+import { sessionUser } from "@/lib/session";
 import { STATUS_COLORS, STATUS_LABELS, fmtMoney, initials, timeAgo } from "@/lib/types";
 import type { Submission, Task, User } from "@/lib/types";
 
 type RecordRow = Submission & { taskTitle: string; payoutCents: number };
+type CredRow = { id: string; title: string; issuer: string | null; url: string | null; createdAt: number };
 
 export default async function OperativePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -13,6 +17,18 @@ export default async function OperativePage({ params }: { params: Promise<{ id: 
   const users = (await sql`SELECT * FROM users WHERE id = ${id}`) as unknown as User[];
   const operative = users[0];
   if (!operative) notFound();
+
+  const viewer = await sessionUser();
+  const own = viewer?.id === id;
+
+  const credRows = (await sql`SELECT * FROM credentials WHERE user_id = ${id} ORDER BY created_at DESC`) as unknown as CredRow[];
+  const credentials: CredentialItem[] = credRows.map((c) => ({
+    id: c.id,
+    title: c.title,
+    issuer: c.issuer,
+    url: c.url,
+    added: timeAgo(c.createdAt),
+  }));
 
   const [stats] = await sql`SELECT
       count(*) FILTER (WHERE status = 'approved')::int AS approved,
@@ -52,15 +68,7 @@ export default async function OperativePage({ params }: { params: Promise<{ id: 
             </Text>
           </div>
         </div>
-        {skills.length ? (
-          <div className="flex flex-wrap items-center gap-2">
-            {skills.map((skill) => (
-              <Badge key={skill} color="gray" variant="soft">
-                {skill}
-              </Badge>
-            ))}
-          </div>
-        ) : null}
+        <SkillEditor skills={skills} editable={own} />
       </section>
 
       <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
@@ -105,6 +113,23 @@ export default async function OperativePage({ params }: { params: Promise<{ id: 
           </div>
         </Card>
       </section>
+
+      {own || credentials.length ? (
+        <section className="flex flex-col gap-3">
+          <div className="flex items-center gap-2">
+            <Heading size="5">Credentials</Heading>
+            {credentials.length ? (
+              <Badge size="2" color="gray" variant="soft">
+                {credentials.length}
+              </Badge>
+            ) : null}
+          </div>
+          <Text size="2" color="gray">
+            Certifications and proof of skill — Handlers see these before releasing work.
+          </Text>
+          <CredentialsEditor items={credentials} editable={own} />
+        </section>
+      ) : null}
 
       <section className="flex flex-col gap-4">
         <Heading size="5">Record</Heading>

@@ -108,6 +108,7 @@ export default async function Search({
 
       {bothEmpty ? (
         <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-[var(--gray-a6)] py-16">
+          <img src="/picto-compass.svg" alt="" style={{ height: 72, width: 72 }} className="opacity-80" />
           <Text size="3" weight="bold">
             Nothing in the files.
           </Text>

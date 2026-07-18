@@ -20,6 +20,7 @@ type S = {
 };
 
 async function main() {
+  await sql`DELETE FROM credentials`;
   await sql`DELETE FROM transactions`;
   await sql`DELETE FROM submissions`;
   await sql`DELETE FROM tasks`;
@@ -150,7 +151,14 @@ async function main() {
     user.balanceCents += txn.kind === "earning" ? txn.amountCents : -txn.amountCents;
   }
 
+  const creds = [
+    { id: uid("crd"), userId: alex.id, title: "Adobe Certified Professional — Premiere Pro", issuer: "Adobe", url: "https://www.credly.com/badges/alex-premiere", createdAt: now - 40 * DAY },
+    { id: uid("crd"), userId: alex.id, title: "Verified Clipper — Creator Program", issuer: "Whop", url: "https://whop.com/verified/alexrivera", createdAt: now - 12 * DAY },
+    { id: uid("crd"), userId: extras[1].id, title: "C2 Proficiency (CPE), Spanish–English", issuer: "Cambridge English", url: null as string | null, createdAt: now - 60 * DAY },
+  ];
+
   for (const u of users) await sql`INSERT INTO users ${sql(u)}`;
+  for (const c of creds) await sql`INSERT INTO credentials ${sql(c)}`;
   for (const task of tasks) await sql`INSERT INTO tasks ${sql(task)}`;
   for (const sub of subs) await sql`INSERT INTO submissions ${sql(sub)}`;
   for (const txn of txns) await sql`INSERT INTO transactions ${sql(txn)}`;

@@ -8,6 +8,7 @@ const STEPS = [
     line: "A Handler posts a contract and commits the budget up front.",
     money: "Committed",
     color: "orange" as const,
+    icon: "/picto-envelope.svg",
   },
   {
     n: "02",
@@ -15,6 +16,7 @@ const STEPS = [
     line: "An operative claims a slot. Free to accept, no interviews.",
     money: "In escrow",
     color: "gray" as const,
+    icon: "/picto-target.svg",
   },
   {
     n: "03",
@@ -22,6 +24,7 @@ const STEPS = [
     line: "The work gets done and a debrief is filed with deliverables.",
     money: "In review",
     color: "info" as const,
+    icon: "/picto-mailbox-up.svg",
   },
   {
     n: "04",
@@ -29,6 +32,7 @@ const STEPS = [
     line: "The Handler reviews the debrief. Approval releases the payout.",
     money: "Released",
     color: "orange" as const,
+    icon: "/picto-receipt.svg",
   },
   {
     n: "05",
@@ -36,6 +40,7 @@ const STEPS = [
     line: "Money lands in the operative's Vault, ready to extract.",
     money: "Paid out",
     color: "success" as const,
+    icon: "/picto-cash.svg",
   },
 ];
 
@@ -142,9 +147,12 @@ export default function HowPage() {
                     {s.money}
                   </Badge>
                 </div>
-                <Text size="3" weight="bold">
-                  {s.title}
-                </Text>
+                <div className="flex items-center gap-2">
+                  <img src={s.icon} alt="" style={{ height: 26, width: 26 }} />
+                  <Text size="3" weight="bold">
+                    {s.title}
+                  </Text>
+                </div>
                 <Text render={<p />} size="1" color="gray">
                   {s.line}
                 </Text>

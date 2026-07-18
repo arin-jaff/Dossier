@@ -35,6 +35,14 @@ async function main() {
     reviewed_at bigint,
     UNIQUE (task_id, earner_id)
   )`;
+  await sql`CREATE TABLE IF NOT EXISTS credentials (
+    id text PRIMARY KEY,
+    user_id text NOT NULL,
+    title text NOT NULL,
+    issuer text,
+    url text,
+    created_at bigint NOT NULL
+  )`;
   await sql`CREATE TABLE IF NOT EXISTS transactions (
     id text PRIMARY KEY,
     user_id text NOT NULL,
