@@ -132,10 +132,10 @@ export default function HowPage() {
         {STEPS.map((s, i) => (
           <div key={s.n} className="contents">
             {i > 0 ? (
-              <Text size="4" color="gray" className="self-center px-1 py-1 lg:py-0">
-                <span className="hidden lg:inline">→</span>
-                <span className="lg:hidden">↓</span>
-              </Text>
+              <div className="self-center">
+                <div className="hidden h-px w-5 bg-[var(--gray-a7)] lg:block" />
+                <div className="mx-auto h-5 w-px bg-[var(--gray-a7)] lg:hidden" />
+              </div>
             ) : null}
             <Card size="3" variant="surface" className="flex-1">
               <div className="flex h-full flex-col gap-2">
